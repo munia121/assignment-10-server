@@ -27,8 +27,17 @@ async function run() {
         // await client.connect();
         // Send a ping to confirm a successful connection
 
+        const database = client.db("FoodCraft");
+        const foodCollection = database.collection("food");
 
-        
+
+
+        app.post('/foodCraft', async (req, res) => {
+            const foods = req.body;
+            console.log(foods)
+            const result = await foodCollection.insertOne(foods);
+            res.send(result);
+        })
 
 
         // await client.db("admin").command({ ping: 1 });
