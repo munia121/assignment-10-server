@@ -31,12 +31,22 @@ async function run() {
         const textileCollection = database.collection("food");
 
 
-        app.get('/textileArt/:id', async(req, res) =>{
+        app.get('/textileArt/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await textileCollection.findOne(query);
             console.log(result)
             res.send(result);
+        })
+
+
+        app.get('/products/:email', async (req, res) => {
+            // const email = req.params.email
+            // const cursor = productCollection.find(email);
+            // const result = await cursor.toArray();
+            const result = await textileCollection.find({ email: req.params.email }).toArray();
+            console.log(result)
+            res.send(result)
         })
 
 
@@ -49,12 +59,20 @@ async function run() {
         })
 
 
-        app.get('/textileArt', async(req, res) =>{
+        app.get('/textileArt', async (req, res) => {
             const cursor = textileCollection.find();
             const result = await cursor.toArray();
             res.send(result)
         })
-        
+
+        app.delete('/textileArt/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query= { _id: new ObjectId(id)};
+            const result = await textileCollection.deleteOne(query);
+            res.send(result)
+            console.log('delete id',id)
+        })
+
 
 
 
