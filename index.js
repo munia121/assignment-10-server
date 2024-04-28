@@ -29,6 +29,18 @@ async function run() {
 
         const database = client.db("FoodCraft");
         const textileCollection = database.collection("food");
+        const dataCollection = database.collection("textileData");
+
+
+        app.get('/allCategory', async (req, res) => {
+            const cursor = dataCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        
+
+
 
 
         app.get('/textileArt/:id', async (req, res) => {
@@ -45,7 +57,7 @@ async function run() {
             // const cursor = productCollection.find(email);
             // const result = await cursor.toArray();
             const result = await textileCollection.find({ email: req.params.email }).toArray();
-            console.log(result)
+            // console.log(result)
             res.send(result)
         })
 
@@ -65,14 +77,41 @@ async function run() {
             res.send(result)
         })
 
-        app.delete('/textileArt/:id', async(req, res) =>{
+        app.delete('/textileArt/:id', async (req, res) => {
             const id = req.params.id;
-            const query= { _id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await textileCollection.deleteOne(query);
             res.send(result)
-            console.log('delete id',id)
+            // console.log('delete id', id)
         })
 
+
+
+        app.put('/textileArt/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateCraft = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const craft = { 
+                $set: {
+                    name: updateCraft.name,
+                    category: updateCraft.category,
+                    price: updateCraft.price,
+                    ratings: updateCraft.ratings,
+                    description: updateCraft.description,
+                    customize: updateCraft.customize,
+                    processing: updateCraft.processing,
+                    stock: updateCraft.stock,
+                    photo: updateCraft.photo,
+
+                }
+            }
+            const result = await textileCollection.updateOne(filter, craft, options);
+            res.send(result)
+
+
+            console.log('update', updateCraft)
+        })
 
 
 
