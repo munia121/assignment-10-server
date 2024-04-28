@@ -38,7 +38,15 @@ async function run() {
             res.send(result)
         })
 
-        
+
+
+        app.get('/textileCategory/:categoryName', async (req, res) => {
+            const id = req.params.categoryName;
+            const query = { category: id };
+            const result = await textileCollection.find(query).toArray();
+            console.log(result)
+            res.send(result);
+        })
 
 
 
